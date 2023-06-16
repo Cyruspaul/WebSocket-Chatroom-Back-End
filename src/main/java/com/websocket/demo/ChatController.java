@@ -2,6 +2,7 @@ package com.websocket.demo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.config.WebSocketMessageBrokerStats;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -23,6 +28,8 @@ public class ChatController {
     @MessageMapping("/message")
     @SendTo("/chat/main")
     public ChatMessage message(ChatMessage chatMessage){
+        //Adding cuurent date time to the Message
+        chatMessage.setLocalDateTime(LocalDateTime.now());
         log.info("CHAT MESSAGE    "+chatMessage);
         if (chatMessage.getMessage() != null){
             messageDAO.save(chatMessage);
@@ -38,13 +45,12 @@ public class ChatController {
         return chatMessage;
     }
 
-    @RequestMapping("/all")
+    @RequestMapping("api/all")
     @ResponseBody
     public ResponseEntity<?> all(ChatMessage chatMessage){
         log.info("CHAT MESSAGE    "+chatMessage);
         Iterable<ChatMessage> all = messageDAO.findAll();
-
-        return ResponseEntity.ok(all);
+        return ResponseEntity.accepted().body(all);
     }
 
 }

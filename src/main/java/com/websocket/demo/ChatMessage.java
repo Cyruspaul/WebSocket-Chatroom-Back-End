@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +16,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ChatMessage {
     private String author;
     private String message;
+    private LocalDateTime localDateTime;
 }
